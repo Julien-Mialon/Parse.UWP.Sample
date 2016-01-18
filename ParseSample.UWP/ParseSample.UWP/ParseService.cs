@@ -1,18 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Activation;
+using Windows.Networking.PushNotifications;
 using Parse;
 
 namespace ParseSample.UWP
 {
 	public static class ParseService
 	{
-		public const string APPLICATION_ID = "<App id>";
-
-		public const string NETCLIENT_KEY = "<.net key>";
-
 		public static void Initialize()
 		{
-			ParseClient.Initialize(APPLICATION_ID, NETCLIENT_KEY);
+			ParseClient.Initialize(Constants.APPLICATION_ID, Constants.NETCLIENT_KEY);
+
+			ParsePush.PushNotificationReceived += ParsePushOnPushNotificationReceived;
+		}
+
+		private static void ParsePushOnPushNotificationReceived(object sender, PushNotificationReceivedEventArgs args)
+		{
+			Debug.WriteLine("Notification received !");
 		}
 
 		public static async Task OnLaunchedAsync(ILaunchActivatedEventArgs args)
